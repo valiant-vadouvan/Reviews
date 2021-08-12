@@ -1,53 +1,45 @@
-psql postgres
+CREATE DATABASE catwalkreviews;
 
-CREATE DATABASE Catwalk-Reviews;
-
-\c Catwalk-Reviews
+\c catwalkreviews
 
 CREATE TABLE IF NOT EXISTS reviews (
   id SERIAL PRIMARY KEY,
   product_id INTEGER NOT NULL,
   rating SMALLINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
   date VARCHAR(20) NOT NULL,
-  summary VARCHAR(150) NOT NULL,
-  body VARCHAR(1000) NOT NULL,
+  summary VARCHAR(1000) NOT NULL,
+  body VARCHAR(2000) NOT NULL,
   recommend BOOLEAN NOT NULL,
   reported BOOLEAN DEFAULT FALSE,
   reviewer_name VARCHAR(70) NOT NULL,
   reviewer_email VARCHAR(70) NOT NULL,
-  response VARCHAR(1000),
+  response VARCHAR(2000),
   helpfulness SMALLINT DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS photos (
+  id SERIAL PRIMARY KEY,
+  review_id INTEGER NOT NULL REFERENCES reviews(id),
+  url VARCHAR(500)
 );
 
 CREATE TABLE IF NOT EXISTS characteristics (
   id SERIAL PRIMARY KEY,
   product_id INTEGER NOT NULL,
-  name VARCHAR(7) NOT NULL
+  name VARCHAR(10) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS review_characteristics (
   id SERIAL PRIMARY KEY,
-  characteristic_id INTEGER NOT NULL,
-  review_id INTEGER NOT NULL,
-  value SMALLINT NOT NULL CHECK (value BETWEEN 1 AND 5),
-  CONSTRAINT fk_review
-    FOREIGN KEY(id)
-      REFERENCES reviews(id),
-  CONSTRAINT fk_characteristic
-    FOREIGN KEY(id)
-      REFERENCES characteristics(id)
+  characteristic_id INTEGER NOT NULL REFERENCES characteristics(id),
+  review_id INTEGER NOT NULL REFERENCES reviews(id),
+  value SMALLINT NOT NULL CHECK (value BETWEEN 1 AND 5)
 );
 
-CREATE TABLE IF NOT EXISTS photos (
-  id SERIAL PRIMARY KEY,
-  review_id INTEGER NOT NULL,
-  url VARCHAR(500),
-  CONSTRAINT fk_review
-    FOREIGN KEY(id)
-      REFERENCES reviews(id)
-);
+\copy reviews(id, product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness) FROM '/Users/briangoodall/Documents/work/Hack Reactor/Immersive/SDC/Reviews/rawData/reviews.csv' DELIMITER ',' CSV HEADER;
 
-COPY reviews FROM '../rawData/reviews.csv' DELIMITER ',' CSV HEADER;
-COPY characteristics FROM '../rawData/characteristics.csv' DELIMITER ',' CSV HEADER;
-COPY review_characteristics FROM '../rawData/characteristic_reviews.csv' DELIMITER ',' CSV HEADER;
-COPY photos FROM '../rawData/reviews_photos.csv' DELIMITER ',' CSV HEADER;
+\copy photos(id, review_id, url) FROM '/Users/briangoodall/Documents/work/Hack Reactor/Immersive/SDC/Reviews/rawData/reviews_photos.csv' DELIMITER ',' CSV HEADER;
+
+\copy characteristics(id, product_id, name) FROM '/Users/briangoodall/Documents/work/Hack Reactor/Immersive/SDC/Reviews/rawData/characteristics.csv' DELIMITER ',' CSV HEADER;
+
+\copy review_characteristics(id, characteristic_id, review_id, value) FROM '/Users/briangoodall/Documents/work/Hack Reactor/Immersive/SDC/Reviews/rawData/characteristic_reviews.csv' DELIMITER ',' CSV HEADER;
