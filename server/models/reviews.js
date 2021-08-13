@@ -2,7 +2,8 @@ var db = require('../db');
 
 module.exports = {
   getReviews: (queryParams, callback) => {
-    const { product_id, page, count } = queryParams;
+    const { product, page, count } = queryParams;
+    console.log('count', count);
     const q = `SELECT
         reviews.id as review_id,
         rating,
@@ -21,10 +22,11 @@ module.exports = {
     FROM reviews
       INNER JOIN photos ON reviews.id = photos.review_id
       WHERE product_id = $1
-	  GROUP BY reviews.id;`;
+      GROUP BY reviews.id
+      LIMIT 1`;
     db.query(
       q,
-      [product_id],
+      [product],
       (err, results) => {
         if (err) {
           callback(err);
