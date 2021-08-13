@@ -11,8 +11,4 @@ const pool = new Pool({
   port: 5432,
 });
 
-// pool.query('SELECT NOW()', (err, res) => {
-//   console.log(err, res)
-// });
-
 module.exports = pool;

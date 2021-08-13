@@ -1,35 +1,38 @@
 var db = require('../db');
 
 module.exports = {
-  getReviews: (callback) => {
+  getReviews: (queryParams, callback) => {
+    const { product_id, page, count } = queryParams;
     const q = `SELECT
-    reviews.product_id as product,
-    0 as page,
-    5 as count,
-      json_build_array(
-      json_build_object(
-        'review_id', reviews.id,
-        'rating', reviews.rating,
-        'summary', reviews.summary,
-        'recommend', reviews.recommend,
-        'response', reviews.response,
-        'body', reviews.body,
-        'date', to_timestamp(reviews.date/1000),
-        'reviewer_name', reviews.reviewer_name,
-        'helpfulness', reviews.helpfulness
-        )) as results
+        reviews.id as review_id,
+        rating,
+        summary,
+        recommend,
+        response,
+        body,
+        to_timestamp(date/1000) as date,
+        reviewer_name,
+        helpfulness,
+        array_agg(
+          json_build_object(
+            'id', photos.id,
+            'url', url
+          )) as photos
     FROM reviews
       INNER JOIN photos ON reviews.id = photos.review_id
-      WHERE product_id = 25167;`
-    db.query(q,
-    (err, results) => {
-      if (err) {
-        callback(err);
-      } else {
-        callback(null, results);
-      }
-    });
-  }, // a function which produces all the messages
+      WHERE product_id = $1
+	  GROUP BY reviews.id;`;
+    db.query(
+      q,
+      [product_id],
+      (err, results) => {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null, results);
+        }
+      });
+  },
 
 
 //   SELECT

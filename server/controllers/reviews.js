@@ -2,14 +2,20 @@ const models = require('../models');
 
 module.exports = {
   get: (req, res) => {
-    models.reviews.getReviews((err, data) => {
+    const page = req.query.page || 0;
+    const count = req.query.count || 5;
+    const { product_id } = req.query;
+    const productObj = { product: product_id, page, count, results: [] }
+    models.reviews.getReviews(req.query, (err, data) => {
       if (err) {
         res.status(404).send('error getting data');
       } else {
-        res.status(200).send(data.rows);
+        console.log('rows', data.rows);
+        productObj.results = data.rows;
+        res.status(200).send(productObj);
       }
     });
-  }, // a function which handles a get request for all messages
+  },
   // post: function (req, res) {
   //   models.messages.create((err, data) => {
   //     if (err) {
