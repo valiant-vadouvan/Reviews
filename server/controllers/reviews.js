@@ -27,6 +27,16 @@ module.exports = {
         console.log('err puttin');
       });
   },
+  putReport: (req, res) => {
+    console.log('pararms in report put', req.params);
+    models.reviews.reportReview(req.params)
+      .then((data) => {
+        res.send('worked part 2 baby');
+      })
+      .catch((err) => {
+        res.send('err puttin');
+      });
+  }
   // post: function (req, res) {
   //   models.messages.create((err, data) => {
   //     if (err) {

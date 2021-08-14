@@ -47,7 +47,11 @@ module.exports = {
     });
   },
   incrementHelpfulness: ({ review_id }) => {
-    const query = { text: `UPDATE reviews SET helpfulness = helpfulness + 1 WHERE id = $1;`, values: [review_id] }
+    const query = { text: 'UPDATE reviews SET helpfulness = helpfulness + 1 WHERE id = $1;', values: [review_id] }
+    return db.query(query);
+  },
+  reportReview: ({ review_id }) => {
+    const query = { text: 'UPDATE reviews SET reported = true WHERE id = $1;', values: [review_id] }
     return db.query(query);
   }
 
