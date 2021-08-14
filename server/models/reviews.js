@@ -5,15 +5,14 @@ module.exports = {
     const { product, count, page, sort } = queryParams;
     let sortQuery;
     if (sort === 'helpful') {
-      sortQuery = 'helpfulness';
+      sortQuery = 'helpfulness DESC';
     } else if (sort === 'newest') {
       sortQuery = 'date';
     }
-    // else if (sort === 'relevant') {
-    //   sortQuery = 'date'
-    // }
-    console.log('sort', sortQuery);
-    const q = {
+    else if (sort === 'relevant') {
+      sortQuery = 'date ASC'
+    }
+    const query = {
       text: `SELECT
             reviews.id as review_id,
             rating,
@@ -33,19 +32,19 @@ module.exports = {
             INNER JOIN photos ON reviews.id = photos.review_id
             WHERE product_id = $1 and reported = false
             GROUP BY reviews.id
-            ORDER BY $3 ASC
+            ORDER BY ${sortQuery}
             LIMIT $2
-            OFFSET $4;`,
-      values: [product, count, sortQuery, page] };
-    db.query(
-      q,
-      (err, results) => {
+            OFFSET $3;`,
+      values: [product, count, page],
+    };
+
+    db.query(query, (err, results) => {
         if (err) {
           callback(err);
         } else {
           callback(null, results);
         }
-      });
+    });
   },
 
 

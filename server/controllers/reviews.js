@@ -17,6 +17,14 @@ module.exports = {
       }
     });
   },
+  putHelpful: (req, res) => {
+    models.reviews.incrementHelpfulness(args)
+      .then((data) => {
+      })
+      .catch((err) => {
+        console.log('err puttin');
+      });
+  },
   // post: function (req, res) {
   //   models.messages.create((err, data) => {
   //     if (err) {
