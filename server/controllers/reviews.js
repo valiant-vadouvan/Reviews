@@ -18,8 +18,10 @@ module.exports = {
     });
   },
   putHelpful: (req, res) => {
-    models.reviews.incrementHelpfulness(args)
+    console.log(req.params);
+    models.reviews.incrementHelpfulness(req.params)
       .then((data) => {
+        res.send('worked bitch!!');
       })
       .catch((err) => {
         console.log('err puttin');
