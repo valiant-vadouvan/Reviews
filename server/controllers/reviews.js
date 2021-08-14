@@ -17,21 +17,29 @@ module.exports = {
       }
     });
   },
+  post: (req, res) => {
+    models.reviews.postReview(req.body)
+      .then((data) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  },
   putHelpful: (req, res) => {
     console.log(req.params);
     models.reviews.incrementHelpfulness(req.params)
       .then((data) => {
-        res.send('worked bitch!!');
+        res.send(data);
       })
       .catch((err) => {
         console.log('err puttin');
       });
   },
   putReport: (req, res) => {
-    console.log('pararms in report put', req.params);
     models.reviews.reportReview(req.params)
       .then((data) => {
-        res.send('worked part 2 baby');
+        res.send(data);
       })
       .catch((err) => {
         res.send('err puttin');
