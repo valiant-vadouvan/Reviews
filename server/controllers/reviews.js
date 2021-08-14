@@ -45,13 +45,4 @@ module.exports = {
         res.send('err puttin');
       });
   }
-  // post: function (req, res) {
-  //   models.messages.create((err, data) => {
-  //     if (err) {
-  //       res.status(404).send('error posting message');
-  //     } else {
-  //       res.status(200).send(data);
-  //     }
-  //   }, req);
-  // } // a function which handles posting a message to the database
 };
