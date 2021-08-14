@@ -23,6 +23,7 @@ module.exports = {
         res.send(data);
       })
       .catch((err) => {
+        console.log('err out?')
         res.send(err);
       });
   },
