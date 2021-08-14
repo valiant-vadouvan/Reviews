@@ -2,31 +2,43 @@ var db = require('../db');
 
 module.exports = {
   getReviews: (queryParams, callback) => {
-    const { product, page, count } = queryParams;
-    console.log('count', count);
-    const q = `SELECT
-        reviews.id as review_id,
-        rating,
-        summary,
-        recommend,
-        response,
-        body,
-        to_timestamp(date/1000) as date,
-        reviewer_name,
-        helpfulness,
-        array_agg(
-          json_build_object(
-            'id', photos.id,
-            'url', url
-          )) as photos
-    FROM reviews
-      INNER JOIN photos ON reviews.id = photos.review_id
-      WHERE product_id = $1
-      GROUP BY reviews.id
-      LIMIT 1`;
+    const { product, count, page, sort } = queryParams;
+    let sortQuery;
+    if (sort === 'helpful') {
+      sortQuery = 'helpfulness';
+    } else if (sort === 'newest') {
+      sortQuery = 'date';
+    }
+    // else if (sort === 'relevant') {
+    //   sortQuery = 'date'
+    // }
+    console.log('sort', sortQuery);
+    const q = {
+      text: `SELECT
+            reviews.id as review_id,
+            rating,
+            summary,
+            recommend,
+            response,
+            body,
+            to_timestamp(date/1000) as date,
+            reviewer_name,
+            helpfulness,
+            array_agg(
+              json_build_object(
+               'id', photos.id,
+               'url', url
+               )) as photos
+            FROM reviews
+            INNER JOIN photos ON reviews.id = photos.review_id
+            WHERE product_id = $1 and reported = false
+            GROUP BY reviews.id
+            ORDER BY $3 ASC
+            LIMIT $2
+            OFFSET $4;`,
+      values: [product, count, sortQuery, page] };
     db.query(
       q,
-      [product],
       (err, results) => {
         if (err) {
           callback(err);

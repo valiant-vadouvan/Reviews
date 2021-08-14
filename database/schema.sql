@@ -43,3 +43,6 @@ CREATE TABLE IF NOT EXISTS review_characteristics (
 \copy characteristics(id, product_id, name) FROM '/Users/briangoodall/Documents/work/Hack Reactor/Immersive/SDC/Reviews/rawData/characteristics.csv' DELIMITER ',' CSV HEADER;
 
 \copy review_characteristics(id, characteristic_id, review_id, value) FROM '/Users/briangoodall/Documents/work/Hack Reactor/Immersive/SDC/Reviews/rawData/characteristic_reviews.csv' DELIMITER ',' CSV HEADER;
+
+
+UPDATE reviews SET response = NULL where response =  'null';
