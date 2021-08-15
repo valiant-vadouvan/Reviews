@@ -1,10 +1,8 @@
 const express = require('express');
+const router = require('./routes.js');
+const app = express();
 const port = 3000;
 
-const router = require('./routes.js');
-
-const app = express();
-module.exports.app = app;
 
 // middleware
 app.use(express.json()) // for parsing application/json

@@ -5,13 +5,13 @@ const router = require('express').Router();
 //Connect controller methods to their corresponding routes
 router.get('/reviews', controller.reviews.get);
 
-router.get('/reviews/meta', controller.reviews.getMeta);
-
 router.post('/reviews', controller.reviews.post);
 
-router.put('/reviews/:review_id/helpful', controller.reviews.putHelpful);
+router.get('/reviews/meta', controller.meta.get);
 
-router.put('/reviews/:review_id/report', controller.reviews.putReport);
+router.put('/reviews/:review_id/helpful', controller.helpful.put);
+
+router.put('/reviews/:review_id/report', controller.report.put);
 
 
 module.exports = router;

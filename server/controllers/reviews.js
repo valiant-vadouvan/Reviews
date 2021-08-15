@@ -17,24 +17,6 @@ module.exports = {
       }
     });
   },
-  getMeta: (req, res) => {
-    const { product_id } = req.query;
-    const productObj =
-    {
-      product: product_id,
-      ratings: {},
-      recommend: {},
-      characteristics: {}
-    };
-    models.reviews.getReviewsMetaData(req.query)
-      .then(({ rows }) => {
-
-        res.send(rows)
-      })
-      .catch((err) => {
-        res.send(err);
-      });
-  },
   post: (req, res) => {
     models.reviews.postReview(req.body)
       .then((data) => {
@@ -43,25 +25,6 @@ module.exports = {
       .catch((err) => {
         console.log('err out?')
         res.send(err);
-      });
-  },
-  putHelpful: (req, res) => {
-    console.log(req.params);
-    models.reviews.incrementHelpfulness(req.params)
-      .then((data) => {
-        res.send(data);
-      })
-      .catch((err) => {
-        console.log('err puttin');
-      });
-  },
-  putReport: (req, res) => {
-    models.reviews.reportReview(req.params)
-      .then((data) => {
-        res.send(data);
-      })
-      .catch((err) => {
-        res.send('err puttin');
       });
   }
 };
