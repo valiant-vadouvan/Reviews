@@ -10,9 +10,8 @@ module.exports = {
       recommend: {},
       characteristics: {}
     };
-    models.reviews.getReviewsMetaData(req.query)
+    models.meta.getMetaData(req.query)
       .then(({ rows }) => {
-
         res.send(rows)
       })
       .catch((err) => {

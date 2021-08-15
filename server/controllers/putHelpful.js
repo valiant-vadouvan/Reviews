@@ -2,7 +2,7 @@ const models = require('../models');
 
 module.exports = {
   put: (req, res) => {
-    models.reviews.incrementHelpfulness(req.params)
+    models.helpful.incrementHelpfulness(req.params)
       .then((data) => {
         res.send(data);
       })

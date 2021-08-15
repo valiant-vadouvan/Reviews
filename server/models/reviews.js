@@ -47,16 +47,6 @@ module.exports = {
         }
     });
   },
-  getReviewsMetaData: ({ product_id }) => {
-    const query = {
-      text:
-      `SELECT json_build_object
-      (rating, count(rating)) as meta
-      FROM reviews WHERE product_id = $1 GROUP BY rating ORDER BY rating;`,
-      values: [product_id]
-    };
-    return db.query(query);
-  },
   postReview: (reqBod) => {
     const { product_id, rating, summary, body, recommend, name, email, photos, characteristics } = reqBod;
     let date = /*timestamp of now in unix or whatever*/ '1615928595216';
@@ -88,14 +78,6 @@ module.exports = {
       text: qString,
       values: [product_id, rating, date, summary, body, recommend, name, email]
     };
-    return db.query(query);
-  },
-  incrementHelpfulness: ({ review_id }) => {
-    const query = { text: 'UPDATE reviews SET helpfulness = helpfulness + 1 WHERE id = $1;', values: [review_id] }
-    return db.query(query);
-  },
-  reportReview: ({ review_id }) => {
-    const query = { text: 'UPDATE reviews SET reported = true WHERE id = $1;', values: [review_id] }
     return db.query(query);
   }
 };
