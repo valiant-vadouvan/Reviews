@@ -1,17 +1,5 @@
 const models = require('../models');
-
-const ratingBuilder = (rows, obj) => {
-  rows.forEach((item) => Object.assign(obj.ratings, item.ratingcount));
-};
-
-const recommendedBuilder = (rows, obj) => {
-  obj.recommend['0'] = rows[0].recommend.false || 0;
-  obj.recommend['1'] = rows[1].recommend.true || 0;
-};
-
-const characteristicsBuilder = (rows, obj) => {
-  rows.forEach((item) => Object.assign(obj.characteristics, item.chars));
-};
+const helpers = require('./helpers');
 
 module.exports = {
   get: (req, res) => {
@@ -26,7 +14,7 @@ module.exports = {
 
     const ratings = models.meta.getRatings(req.query)
       .then(({ rows }) => {
-        ratingBuilder(rows, productObj);
+        helpers.ratingBuilder(rows, productObj);
       })
       .catch((err) => {
         console.log('err in metaRatings')
@@ -34,7 +22,7 @@ module.exports = {
 
     const recomends = models.meta.getRecommend(req.query)
       .then(({ rows }) => {
-        recommendedBuilder(rows, productObj);
+        helpers.recommendedBuilder(rows, productObj);
       })
       .catch((err) => {
         console.log('err in metaRecommends')
@@ -42,7 +30,7 @@ module.exports = {
 
     const characteristics = models.meta.getCharacteristics(req.query)
       .then(({ rows }) => {
-        characteristicsBuilder(rows, productObj);
+        helpers.characteristicsBuilder(rows, productObj);
       })
       .catch((err) => {
         console.log('err in metaCharacteristics')
