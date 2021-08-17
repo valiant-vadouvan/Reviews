@@ -10,7 +10,7 @@ module.exports = {
 
     models.reviews.getReviews(productObj, (err, data) => {
       if (err) {
-        res.status(404).send('error getting data');
+        res.status(404).send(err);
       } else {
         productObj.results = data.rows;
         res.status(200).send(productObj);
@@ -23,7 +23,6 @@ module.exports = {
         res.send(data);
       })
       .catch((err) => {
-        console.log('err out?')
         res.send(err);
       });
   }

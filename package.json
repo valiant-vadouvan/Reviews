@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/app.js",
-    "artillery": "$(npm bin)/artillery run tests/getReviews.yaml"
+    "start-prod": "node server/app.js",
+    "artillery": "npx artillery"
   },
   "repository": {
     "type": "git",

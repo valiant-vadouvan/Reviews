@@ -1,20 +1,22 @@
 config:
-  target: "http://localhost:3000/reviews/?product_id=25167&count=10"
+  target: "http://localhost:3000"
   phases:
-    - duration: 5
-      arrivalRate: 5
-      name: Warm up
-    - duration: 5
-      arrivalRate: 5
-      rampTo: 50
-      name: Ramp up load
-    - duration: 5
-      arrivalRate: 50
-      name: Sustained load
+  - duration: 1
+    arrivalRate: 5
+    name: Warm up
+  - duration: 3
+    arrivalRate: 5
+    rampTo: 300
+    name: Ramp up load
+  - duration: 5
+    arrivalRate: 1500
+    name: Sustained load
 
 
 scenarios:
   - name: "Access reviews"
     flow:
     - get:
-          url: "/"
+          url: "/reviews?product_id=25169&count=10"
+    - get:
+          url: "/reviews/meta?product_id=25169"
