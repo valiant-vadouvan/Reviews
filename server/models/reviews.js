@@ -8,11 +8,11 @@ module.exports = {
     if (sort === 'helpful') {
       sortQuery = 'helpfulness DESC';
     } else if (sort === 'newest') {
-      sortQuery = 'date ASC';
+      sortQuery = 'date DESC';
     }
-    // else if (sort === 'relevant') {
-    //   sortQuery = 'date ASC'
-    // }
+    else if (sort === 'relevant') {
+      sortQuery = 'date DESC'
+    }
     const query = {
       text: `SELECT
             reviews.id as review_id,
@@ -38,18 +38,11 @@ module.exports = {
             OFFSET $3;`,
       values: [product, count, page],
     };
-
-    db.query(query, (err, results) => {
-        if (err) {
-          callback(err);
-        } else {
-          callback(null, results);
-        }
-    });
+    return db.query(query);
   },
   postReview: (reqBod) => {
     const { product_id, rating, summary, body, recommend, name, email, photos, characteristics } = reqBod;
-    let date = /*timestamp of now in unix or whatever*/ '1615928595216';
+    let date = Date.now();
 
     const photoEntries = photos.map((item) => `((SELECT review_id from insReviews), '${item}')`);
     const photoQueries = photoEntries.join(', ');

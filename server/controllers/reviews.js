@@ -8,14 +8,14 @@ module.exports = {
     const { product_id } = req.query;
     const productObj = { product: product_id, count, page, sort, results: [] };
 
-    models.reviews.getReviews(productObj, (err, data) => {
-      if (err) {
-        res.status(404).send(err);
-      } else {
-        productObj.results = data.rows;
-        res.status(200).send(productObj);
-      }
-    });
+    models.reviews.getReviews(productObj)
+      .then(({ rows }) => {
+        productObj.results = rows;
+        res.send(productObj);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
   },
   post: (req, res) => {
     models.reviews.postReview(req.body)

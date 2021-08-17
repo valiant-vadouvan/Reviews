@@ -7,7 +7,7 @@ module.exports = {
         res.send(data);
       })
       .catch((err) => {
-        console.log('err puttin');
+        console.log(err);
       });
   }
 };
