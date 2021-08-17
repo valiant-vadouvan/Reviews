@@ -37,7 +37,7 @@ module.exports = {
       });
 
     Promise.all([ratings, recomends, characteristics])
-      .then((data) => {
+      .then(() => {
         res.send(productObj);
       })
       .catch((err) => {
