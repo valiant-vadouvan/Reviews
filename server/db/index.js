@@ -5,7 +5,7 @@ const { Pool } = require('pg')
 // for connection information
 
 const pool = new Pool({
-  user: 'briangoodall',
+  user: 'postgres',
   host: 'localhost',
   database: 'catwalkreviews',
   port: 5432,
