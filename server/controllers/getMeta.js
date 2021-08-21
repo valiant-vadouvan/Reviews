@@ -17,7 +17,7 @@ module.exports = {
         helpers.ratingBuilder(rows, productObj);
       })
       .catch((err) => {
-        console.log(err)
+        res.send(err)
       });
 
     const recomends = models.meta.getRecommend(req.query)
@@ -25,7 +25,7 @@ module.exports = {
         helpers.recommendedBuilder(rows, productObj);
       })
       .catch((err) => {
-        console.log(err)
+        res.send(err)
       });
 
     const characteristics = models.meta.getCharacteristics(req.query)
@@ -33,7 +33,7 @@ module.exports = {
         helpers.characteristicsBuilder(rows, productObj);
       })
       .catch((err) => {
-        console.log(err)
+        res.send(err)
       });
 
     Promise.all([ratings, recomends, characteristics])
